@@ -35,6 +35,7 @@ namespace RoundTheClock.UnitTests
         [Test]
         public void FindUncommittedByCustomer()
         {
+            ClearTables();
             var result = _unitOfWork.FindUncommittedByCustomer(CustomerEnum.EnergiMidt);
             Assert.IsTrue(result.Count == 2);
         }
@@ -42,36 +43,28 @@ namespace RoundTheClock.UnitTests
         [Test]
         public void Insert()
         {
+            ClearTables();
             var timeEntries = new List<TimeEntry> {
                 new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 3, Date = DateTime.Parse("2014-12-27"), Customer = CustomerEnum.EnergiMidt },
                 new TimeEntry { Project = "Internt", Task = "Testfællesskab", Hours = 1, Date = DateTime.Parse("2014-11-09") }
             };
-            var noRows = _unitOfWork.Insert(timeEntries);
-            Assert.IsTrue(noRows == 2);
-        }
 
-        // todo: Possibly make this part of the Insert test as it needs this test to pass.
-        [Test]
-        [ExpectedException(typeof(SQLiteException))]
-        public void InsertDuplicate()
-        {
-            var timeEntries = new List<TimeEntry> {
+            var duplicateTimeEntries = new List<TimeEntry> {
                 new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = CustomerEnum.EnergiMidt },
                 new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = CustomerEnum.EnergiMidt }
             };
+
             var noRows = _unitOfWork.Insert(timeEntries);
-            Assert.IsTrue(noRows == 1);
+            var noDuplicateRows = _unitOfWork.Insert(duplicateTimeEntries);
+
+            Assert.IsTrue(noRows == 2);
+            Assert.IsTrue(noDuplicateRows == 1);
         }
 
-        [TearDown] // Clean up database such that it doesn't take up space
-        public void TearDown()
-        {
-            ClearTables();
-        }
+
 
         public void SetUpTables()
         {
-            ClearTables(); // In case I stop debugging when an exception is thrown, the tables aren't cleaned up.
             var customer = "EnergiMidt";
             var timeEntries = new List<TimeEntry> {
                 new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 1, Date = DateTime.Parse("2014-12-01"), Customer = CustomerEnum.EnergiMidt },
