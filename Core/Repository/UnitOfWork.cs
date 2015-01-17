@@ -21,16 +21,15 @@ namespace RoundTheClock.Core.Repository
         /// <summary>
         /// Returns the time entries present in the time entries table, but not in the customer table
         /// </summary>
-        public List<TimeEntry> FindUncommittedByCustomer(CustomerEnum customer)
+        public List<TimeEntry> FindUncommittedByCustomer(Customer customer)
         {
             using (var conn = _dbConnection.Connection)
             {
                 conn.Open();
-                var customerAsString = Enum.GetName(typeof(CustomerEnum), customer);
                 return conn.Query<TimeEntryDAO>(
                     String.Concat("Select * from ", DbConnection.TimeEntryTable,
-                    " where `Date` > (select max(Date) from ", customerAsString, ")",
-                    " and `Customer` = '", customerAsString, "'")).Select(dao => TimeEntryDAO.Adapt(dao)).ToList();
+                    " where `Date` > (select max(Date) from ", customer.Name, ")",
+                    " and `Customer` = '", customer.Name, "'")).Select(dao => TimeEntryDAO.Adapt(dao)).ToList();
             }
         }
 

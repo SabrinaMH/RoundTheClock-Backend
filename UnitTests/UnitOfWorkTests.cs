@@ -10,6 +10,7 @@ using System.Globalization;
 using Dapper;
 using System.Linq;
 using RoundTheClock.Core.Repository;
+using System.Data;
 
 namespace RoundTheClock.UnitTests
 {
@@ -25,59 +26,84 @@ namespace RoundTheClock.UnitTests
         {
             var _connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
             _fullConnectionString = "Data Source=" + Path.Combine(Environment.CurrentDirectory, _connectionString);
-
             _unitOfWork = new UnitOfWork(new DbConnection(_fullConnectionString));
-
-            // Does not make Insert() test redundant as this checks through _unitOfWork
-            SetUpTables();
         }
 
         [Test]
         public void FindUncommittedByCustomer()
         {
-            ClearTables();
-            var result = _unitOfWork.FindUncommittedByCustomer(CustomerEnum.EnergiMidt);
+            var energiMidt = new Customer("EnergiMidt");
+            ClearTables(new List<Customer> { energiMidt });
+            SetUpTables();
+
+            var result = _unitOfWork.FindUncommittedByCustomer(energiMidt);
             Assert.IsTrue(result.Count == 2);
         }
 
         [Test]
         public void Insert()
         {
-            ClearTables();
+            var energiMidt = new Customer("EnergiMidt");
+            var mitEnergiMidt = new Project("MitEnergiMidt");
+            var nytWebsite = new Task("Nyt website - MitEnergiMidt.dk");
+            var mjolner = new Customer("Mjolner");
+            var internt = new Project("Internt");
+            var testfaellesskab = new Task("Testfællesskab");
+
+            ClearTables(new List<Customer> { energiMidt, mjolner });
+            SetUpTables();
+
             var timeEntries = new List<TimeEntry> {
-                new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 3, Date = DateTime.Parse("2014-12-27"), Customer = CustomerEnum.EnergiMidt },
-                new TimeEntry { Project = "Internt", Task = "Testfællesskab", Hours = 1, Date = DateTime.Parse("2014-11-09") }
+                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-27"), Customer = energiMidt },
+                new TimeEntry { Project = internt, Task = testfaellesskab, Hours = 1, Date = DateTime.Parse("2014-11-09"), Customer = mjolner }
             };
 
             var duplicateTimeEntries = new List<TimeEntry> {
-                new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = CustomerEnum.EnergiMidt },
-                new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = CustomerEnum.EnergiMidt }
+                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = energiMidt },
+                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = energiMidt }
             };
 
             var noRows = _unitOfWork.Insert(timeEntries);
-            var noDuplicateRows = _unitOfWork.Insert(duplicateTimeEntries);
-
             Assert.IsTrue(noRows == 2);
-            Assert.IsTrue(noDuplicateRows == 1);
+
+            try {
+                _unitOfWork.Insert(duplicateTimeEntries);
+                Assert.Fail();
+            }
+            catch (SQLiteException sqliteEx)
+            {
+                if (sqliteEx.Message.IndexOf("unique constraint failed", StringComparison.OrdinalIgnoreCase) == -1)
+                {
+                    Assert.Fail();
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail();
+            }
         }
-
-
 
         public void SetUpTables()
         {
-            var customer = "EnergiMidt";
+            var energiMidt = new Customer("EnergiMidt");
+            var mitEnergiMidt = new Project("MitEnergiMidt");
+            var nytWebsite = new Task("Nyt website - MitEnergiMidt.dk");
+            var mjolner = new Customer("Mjolner");
+            var internt = new Project("Internt");
+            var morgenmoede = new Task("morgenmøde");
+
             var timeEntries = new List<TimeEntry> {
-                new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 1, Date = DateTime.Parse("2014-12-01"), Customer = CustomerEnum.EnergiMidt },
-                new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 2, Date = DateTime.Parse("2013-12-01"), Customer = CustomerEnum.EnergiMidt },
-                new TimeEntry { Project = "EnergiMidt", Task = "Nyt website - MitEnergiMidt.dk", Hours = 3, Date = DateTime.Parse("2013-11-02"), Customer = CustomerEnum.EnergiMidt },
-                new TimeEntry { Project = "Internt", Task = "Morgenmøde", Hours = 0.5F, Date = DateTime.Parse("2014-11-09") }
+                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 1, Date = DateTime.Parse("2014-12-01"), Customer = energiMidt },
+                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 2, Date = DateTime.Parse("2013-12-01"), Customer = energiMidt },
+                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2013-11-02"), Customer = energiMidt },
+                new TimeEntry { Project = internt, Task = morgenmoede, Hours = 0.5F, Date = DateTime.Parse("2014-11-09"), Customer = mjolner }
             };
 
             var customerEntries = new List<TimeEntry> { 
-                timeEntries.Where(entry => entry.Customer == CustomerEnum.EnergiMidt).OrderBy(entry => entry.Date).First() 
+                timeEntries.Where(entry => entry.Customer.Name == energiMidt.Name).OrderBy(entry => entry.Date).First() 
             };
 
-            _uncommittedCustomerEntries = timeEntries.Count(entry => entry.Customer == CustomerEnum.EnergiMidt) - customerEntries.Count;
+            _uncommittedCustomerEntries = timeEntries.Count(entry => entry.Customer.Name == energiMidt.Name) - customerEntries.Count;
 
             using (var conn = new SQLiteConnection(_fullConnectionString))
             {
@@ -85,21 +111,19 @@ namespace RoundTheClock.UnitTests
                     "(Project, Task, Hours, Date, Customer) VALUES (@Project, @Task, @Hours, @Date, @Customer)", 
                     timeEntries.Select(entry => TimeEntryDAO.Adapt(entry)));
                 
-                conn.Execute("Insert into " + customer + 
+                conn.Execute("Insert into " + energiMidt.Name + 
                     "(Project, Task, Date) VALUES (@Project, @Task, @Date)", 
                     customerEntries.Select(entry => TimeEntryDAO.Adapt(entry)));            
             }
         }
 
-        public void ClearTables()
+        public void ClearTables(List<Customer> customers)
         {
             using (var conn = new SQLiteConnection(_fullConnectionString))
             {
                 conn.Execute("DELETE FROM " + DbConnection.TimeEntryTable);
-                foreach (var customerTable in Enum.GetNames(typeof(CustomerEnum)))
-                {
-                    conn.Execute("DELETE FROM " + customerTable);
-                }
+                conn.Execute("DELETE FROM Mjolner");
+                conn.Execute("DELETE FROM EnergiMidt");
             }
         }
     }

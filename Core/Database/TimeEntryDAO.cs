@@ -19,10 +19,10 @@ namespace RoundTheClock.Core.Database
         {
             return new TimeEntryDAO
             {
-                Customer = timeEntry.Customer != null ? Enum.GetName(typeof(CustomerEnum), timeEntry.Customer) : null,
+                Customer = timeEntry.Customer.Name,
                 Hours = timeEntry.Hours,
-                Project = timeEntry.Project,
-                Task = timeEntry.Task,
+                Project = timeEntry.Project.Name,
+                Task = timeEntry.Task.Name,
                 Date = timeEntry.Date.ToString("yyyyMMdd")
             };
         }
@@ -31,10 +31,10 @@ namespace RoundTheClock.Core.Database
         {
             return new TimeEntry
             {
-                Customer = (CustomerEnum)Enum.Parse(typeof(CustomerEnum), dao.Customer, ignoreCase: true),
+                Customer = new Customer(dao.Customer),
                 Hours = dao.Hours,
-                Project = dao.Project,
-                Task = dao.Task,
+                Project = new Project(dao.Project),
+                Task = new Task(dao.Task),
                 Date = DateTime.ParseExact(dao.Date, "yyyyMMdd", CultureInfo.InvariantCulture)
             }; 
         }
