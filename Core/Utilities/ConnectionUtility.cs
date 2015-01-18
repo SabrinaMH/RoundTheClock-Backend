@@ -1,3 +1,4 @@
+using RoundTheClock.Core.Database;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -5,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace RoundTheClock.Helpers
+namespace RoundTheClock.Core.Utilities
 {
-    public static class ConnectionHelper
+    public static class ConnectionUtility
     {
         public static string ConnectionString
         {
