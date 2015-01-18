@@ -41,6 +41,10 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.38.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Dapper.1.38\lib\net45\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
@@ -53,9 +57,18 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -128,15 +141,28 @@
   <ItemGroup>
     <Compile Include="App_Code\Global.asax.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\TimeEntriesController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\TimeEntryController.cs" />
+    <Compile Include="Database\CustomerDAO.cs" />
     <Compile Include="Database\DbConnection.cs" />
+    <Compile Include="Database\IDbConnection.cs" />
+    <Compile Include="Database\ProjectDAO.cs" />
+    <Compile Include="Database\TaskDAO.cs" />
     <Compile Include="Database\TimeEntryDAO.cs" />
+    <Compile Include="Dependencies\UnityResolver.cs" />
+    <Compile Include="Mappers\CustomerMapper.cs" />
+    <Compile Include="Mappers\ProjectMapper.cs" />
+    <Compile Include="Mappers\TaskMapper.cs" />
+    <Compile Include="Mappers\TimeEntryMapper.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\Task.cs" />
-    <Compile Include="Repository\Administration.cs" />
-    <Compile Include="Repository\UnitOfWork.cs" />
-    <Compile Include="Helpers\ConnectionHelper.cs" />
+    <Compile Include="Repository\CustomerRepository.cs" />
+    <Compile Include="Repository\ICustomerRepository.cs" />
+    <Compile Include="Repository\ProjectRepository.cs" />
+    <Compile Include="Repository\TaskRepository.cs" />
+    <Compile Include="Repository\TimeEntryRepository.cs" />
+    <Compile Include="Utilities\ConnectionUtility.cs" />
     <Compile Include="Logging\GlobalExceptionHandler.cs" />
     <Compile Include="Logging\GlobalExceptionLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

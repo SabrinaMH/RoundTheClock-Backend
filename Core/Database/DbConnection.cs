@@ -1,31 +1,24 @@
-using RoundTheClock.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
-using System.Web;
 
 namespace RoundTheClock.Core.Database
 {
-    public class DbConnection
+    public class DbConnection : IDbConnection
     {
-        const string _timeEntryTable = "TimeEntries";
+        public readonly string TimeEntryTable = "TimeEntries";
+        public readonly string CustomerTable = "Customers";
+        public readonly string ProjectTable = "Projects";
+        public readonly string TaskTable = "Tasks";
+
         readonly string _connectionString;
-        
-        public DbConnection(string connectionString){
+
+        public DbConnection(string connectionString)
+        {
             _connectionString = connectionString;
         }
 
-        public SQLiteConnection Connection
+        public SQLiteConnection NewConnection
         {
             get { return _connectionString != null ? new SQLiteConnection(_connectionString) : null; }
-        }
-
-        public static string TimeEntryTable
-        {
-            get { return _timeEntryTable; }
         }
     }
 }

@@ -1,42 +1,42 @@
-﻿using NUnit.Framework;
-using System;
-using System.Data.SQLite;
-using System.Configuration;
-using System.Collections.Generic;
+﻿using Dapper;
+using NUnit.Framework;
 using RoundTheClock.Core.Database;
+using RoundTheClock.Core.Mappers;
 using RoundTheClock.Core.Model;
-using System.IO;
-using System.Globalization;
-using Dapper;
-using System.Linq;
 using RoundTheClock.Core.Repository;
-using System.Data;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SQLite;
+using System.IO;
+using System.Linq;
 
 namespace RoundTheClock.UnitTests
 {
     [TestFixture]
-    public class UnitOfWorkTest
+    public class TimeEntryRepositoryTests
     {
-        private UnitOfWork _unitOfWork;
-        private string _fullConnectionString;
+        private TimeEntryRepository _timeEntryRepository;
         private int _uncommittedCustomerEntries;
-        
+        private DbConnection _dbConnection;
+
         [SetUp]
         public void SetUp()
         {
             var _connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
-            _fullConnectionString = "Data Source=" + Path.Combine(Environment.CurrentDirectory, _connectionString);
-            _unitOfWork = new UnitOfWork(new DbConnection(_fullConnectionString));
+            var fullConnectionString = "Data Source=" + Path.Combine(Environment.CurrentDirectory, _connectionString);
+            _dbConnection = new DbConnection(fullConnectionString);
+            _timeEntryRepository = new TimeEntryRepository(_dbConnection);
         }
 
         [Test]
-        public void FindUncommittedByCustomer()
+        public void GetUncommittedForCustomer()
         {
             var energiMidt = new Customer("EnergiMidt");
             ClearTables(new List<Customer> { energiMidt });
             SetUpTables();
 
-            var result = _unitOfWork.FindUncommittedByCustomer(energiMidt);
+            var result = _timeEntryRepository.GetUncommittedForCustomer(energiMidt);
             Assert.IsTrue(result.Count == 2);
         }
 
@@ -63,11 +63,12 @@ namespace RoundTheClock.UnitTests
                 new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = energiMidt }
             };
 
-            var noRows = _unitOfWork.Insert(timeEntries);
+            var noRows = _timeEntryRepository.Insert(timeEntries);
             Assert.IsTrue(noRows == 2);
 
-            try {
-                _unitOfWork.Insert(duplicateTimeEntries);
+            try
+            {
+                _timeEntryRepository.Insert(duplicateTimeEntries);
                 Assert.Fail();
             }
             catch (SQLiteException sqliteEx)
@@ -105,23 +106,23 @@ namespace RoundTheClock.UnitTests
 
             _uncommittedCustomerEntries = timeEntries.Count(entry => entry.Customer.Name == energiMidt.Name) - customerEntries.Count;
 
-            using (var conn = new SQLiteConnection(_fullConnectionString))
+            using (var conn = _dbConnection.NewConnection)
             {
-                conn.Execute("INSERT INTO " + DbConnection.TimeEntryTable + 
-                    "(Project, Task, Hours, Date, Customer) VALUES (@Project, @Task, @Hours, @Date, @Customer)", 
-                    timeEntries.Select(entry => TimeEntryDAO.Adapt(entry)));
-                
-                conn.Execute("Insert into " + energiMidt.Name + 
-                    "(Project, Task, Date) VALUES (@Project, @Task, @Date)", 
-                    customerEntries.Select(entry => TimeEntryDAO.Adapt(entry)));            
+                conn.Execute("INSERT INTO " + _dbConnection.TimeEntryTable +
+                    "(Project, Task, Hours, Date, Customer) VALUES (@Project, @Task, @Hours, @Date, @Customer)",
+                    timeEntries.Select(entry => TimeEntryMapper.Map(entry)));
+
+                conn.Execute("Insert into " + energiMidt.Name +
+                    "(Project, Task, Date) VALUES (@Project, @Task, @Date)",
+                    customerEntries.Select(entry => TimeEntryMapper.Map(entry)));
             }
         }
 
         public void ClearTables(List<Customer> customers)
         {
-            using (var conn = new SQLiteConnection(_fullConnectionString))
+            using (var conn = _dbConnection.NewConnection)
             {
-                conn.Execute("DELETE FROM " + DbConnection.TimeEntryTable);
+                conn.Execute("DELETE FROM " + _dbConnection.TimeEntryTable);
                 conn.Execute("DELETE FROM Mjolner");
                 conn.Execute("DELETE FROM EnergiMidt");
             }
