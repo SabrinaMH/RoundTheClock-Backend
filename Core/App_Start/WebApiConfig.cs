@@ -1,4 +1,7 @@
+using Microsoft.Practices.Unity;
+using RoundTheClock.Core.Dependencies;
 using RoundTheClock.Core.Logging;
+using RoundTheClock.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,10 @@ namespace RoundTheClock
     {
         public static void Register(HttpConfiguration config)
         {
+            var container = new UnityContainer();
+            container.RegisterType<ICustomerRepository, CustomerRepository>(new HierarchicalLifetimeManager());
+            config.DependencyResolver = new UnityResolver(container);
+
             config.Routes.MapHttpRoute("Default",
                 "{controller}/{id}",
                 new { id = RouteParameter.Optional });
