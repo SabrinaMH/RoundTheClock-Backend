@@ -1,6 +1,6 @@
 using RoundTheClock.Core.Database;
 using RoundTheClock.Core.Model;
-using RoundTheClock.Core.Repository;
+using RoundTheClock.Core.Repositories;
 using RoundTheClock.Core.Utilities;
 using System.Collections.Generic;
 using System.Web.Http;

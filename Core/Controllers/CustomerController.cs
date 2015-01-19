@@ -1,6 +1,6 @@
-﻿using RoundTheClock.Core.Database;
-using RoundTheClock.Core.Repository;
-using RoundTheClock.Core.Utilities;
+﻿using RoundTheClock.Core.Model;
+using RoundTheClock.Core.Repositories;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace RoundTheClock.Core.Controllers
@@ -14,10 +14,9 @@ namespace RoundTheClock.Core.Controllers
             _customerRepository = customerRepository;
         }
 
-        // Get all customers
         public IHttpActionResult Get()
         {
-            return null;
+            return Ok<IEnumerable<Customer>>(_customerRepository.GetCustomers());
         }
     }
 }

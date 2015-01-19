@@ -142,6 +142,7 @@
     <Compile Include="App_Code\Global.asax.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TimeEntryController.cs" />
     <Compile Include="Database\CustomerDAO.cs" />
     <Compile Include="Database\DbConnection.cs" />
@@ -157,11 +158,11 @@
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\Task.cs" />
-    <Compile Include="Repository\CustomerRepository.cs" />
-    <Compile Include="Repository\ICustomerRepository.cs" />
-    <Compile Include="Repository\ProjectRepository.cs" />
-    <Compile Include="Repository\TaskRepository.cs" />
-    <Compile Include="Repository\TimeEntryRepository.cs" />
+    <Compile Include="Repositories\CustomerRepository.cs" />
+    <Compile Include="Repositories\ICustomerRepository.cs" />
+    <Compile Include="Repositories\ProjectRepository.cs" />
+    <Compile Include="Repositories\TaskRepository.cs" />
+    <Compile Include="Repositories\TimeEntryRepository.cs" />
     <Compile Include="Utilities\ConnectionUtility.cs" />
     <Compile Include="Logging\GlobalExceptionHandler.cs" />
     <Compile Include="Logging\GlobalExceptionLogger.cs" />
