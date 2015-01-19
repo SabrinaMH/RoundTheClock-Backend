@@ -4,10 +4,10 @@ namespace RoundTheClock.Core.Database
 {
     public class DbConnection : IDbConnection
     {
-        public readonly string TimeEntryTable = "TimeEntries";
-        public readonly string CustomerTable = "Customers";
-        public readonly string ProjectTable = "Projects";
-        public readonly string TaskTable = "Tasks";
+        private readonly string _timeEntryTable = "TimeEntries";
+        private readonly string _customerTable = "Customers";
+        private readonly string _projectTable = "Projects";
+        private readonly string _taskTable = "Tasks";
 
         readonly string _connectionString;
 
@@ -19,6 +19,26 @@ namespace RoundTheClock.Core.Database
         public SQLiteConnection NewConnection
         {
             get { return _connectionString != null ? new SQLiteConnection(_connectionString) : null; }
+        }
+
+        public string TimeEntryTable
+        {
+            get { return _timeEntryTable; }
+        }
+
+        public string CustomerTable
+        {
+            get { return _customerTable; }
+        }
+
+        public string ProjectTable
+        {
+            get { return _projectTable; }
+        }
+
+        public string TaskTable
+        {
+            get { return _taskTable; }
         }
     }
 }

@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace RoundTheClock.Core.Database
 {
-    interface IDbConnection
+    public interface IDbConnection
     {
         SQLiteConnection NewConnection { get; }
+
+        string TimeEntryTable { get; }
+        string CustomerTable { get; }
+        string ProjectTable { get; }
+        string TaskTable { get; }
     }
 }
