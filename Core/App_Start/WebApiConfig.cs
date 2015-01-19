@@ -1,7 +1,7 @@
 using Microsoft.Practices.Unity;
 using RoundTheClock.Core.Dependencies;
 using RoundTheClock.Core.Logging;
-using RoundTheClock.Core.Repository;
+using RoundTheClock.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

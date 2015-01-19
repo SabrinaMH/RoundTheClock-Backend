@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using RoundTheClock.Core.Database;
 using RoundTheClock.Core.Model;
-using RoundTheClock.Core.Repository;
+using RoundTheClock.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -32,7 +32,7 @@ namespace RoundTheClock.UnitTests
             ClearTables();
             SetUpTables();
 
-            var result = _customerRepository.GetAllCustomers();
+            var result = _customerRepository.GetCustomers();
 
             Assert.IsTrue(result.Count == _customers.Count);
         }

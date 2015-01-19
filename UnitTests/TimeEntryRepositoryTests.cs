@@ -3,7 +3,7 @@ using NUnit.Framework;
 using RoundTheClock.Core.Database;
 using RoundTheClock.Core.Mappers;
 using RoundTheClock.Core.Model;
-using RoundTheClock.Core.Repository;
+using RoundTheClock.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
