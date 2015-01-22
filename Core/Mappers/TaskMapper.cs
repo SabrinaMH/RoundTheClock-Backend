@@ -9,8 +9,7 @@ namespace RoundTheClock.Core.Mappers
         {
             return new Task
             {
-                Name = dao.Name,
-                ProjectId = dao.ProjectId
+                Name = dao.Name
             };
         }
     }

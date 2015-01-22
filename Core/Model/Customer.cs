@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RoundTheClock.Core.Model
 {
     public class Customer
     {
-        public String Name { get; set; }
+        public string Name { get; set; }
+        public List<Project> Projects { get; set; }
 
         public Customer() { }
 

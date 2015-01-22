@@ -158,7 +158,7 @@
     <Compile Include="Database\TaskDAO.cs" />
     <Compile Include="Database\TimeEntryDAO.cs" />
     <Compile Include="Dependencies\UnityResolver.cs" />
-    <Compile Include="ApiClients\HarvestApiClient.cs" />
+    <Compile Include="ClientAPIs\HarvestAPI.cs" />
     <Compile Include="Mappers\CustomerMapper.cs" />
     <Compile Include="Mappers\ProjectMapper.cs" />
     <Compile Include="Mappers\TaskMapper.cs" />
@@ -168,6 +168,8 @@
     <Compile Include="Model\Task.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
     <Compile Include="Repositories\ICustomerRepository.cs" />
+    <Compile Include="Repositories\IProjectRepository.cs" />
+    <Compile Include="Repositories\ITimeEntryRepository.cs" />
     <Compile Include="Repositories\ProjectRepository.cs" />
     <Compile Include="Repositories\TaskRepository.cs" />
     <Compile Include="Repositories\TimeEntryRepository.cs" />
