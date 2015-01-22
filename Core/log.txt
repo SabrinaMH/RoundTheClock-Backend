@@ -1,0 +1,36 @@
+Unhandled exception thrown in GET for request http://localhost:50363/Customer/: System.InvalidOperationException: An error occurred when trying to create a controller of type 'CustomerController'. Make sure that the controller has a parameterless public constructor. ---> System.ArgumentException: Type 'RoundTheClock.Core.Controllers.CustomerController' does not have a default constructor
+   at System.Linq.Expressions.Expression.New(Type type)
+   at System.Web.Http.Internal.TypeActivator.Create[TBase](Type instanceType)
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.GetInstanceOrActivator(HttpRequestMessage request, Type controllerType, Func`1& activator)
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
+   --- End of inner exception stack trace ---
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
+   at System.Web.Http.Controllers.HttpControllerDescriptor.CreateController(HttpRequestMessage request)
+   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()
+Unhandled exception thrown in GET for request http://localhost:50363/Customer/Get: System.InvalidOperationException: An error occurred when trying to create a controller of type 'CustomerController'. Make sure that the controller has a parameterless public constructor. ---> System.ArgumentException: Type 'RoundTheClock.Core.Controllers.CustomerController' does not have a default constructor
+   at System.Linq.Expressions.Expression.New(Type type)
+   at System.Web.Http.Internal.TypeActivator.Create[TBase](Type instanceType)
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.GetInstanceOrActivator(HttpRequestMessage request, Type controllerType, Func`1& activator)
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
+   --- End of inner exception stack trace ---
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
+   at System.Web.Http.Controllers.HttpControllerDescriptor.CreateController(HttpRequestMessage request)
+   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()
+Unhandled exception thrown in GET for request http://localhost:50363/Customer/Get: System.InvalidOperationException: An error occurred when trying to create a controller of type 'CustomerController'. Make sure that the controller has a parameterless public constructor. ---> System.ArgumentException: Type 'RoundTheClock.Core.Controllers.CustomerController' does not have a default constructor
+   at System.Linq.Expressions.Expression.New(Type type)
+   at System.Web.Http.Internal.TypeActivator.Create[TBase](Type instanceType)
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.GetInstanceOrActivator(HttpRequestMessage request, Type controllerType, Func`1& activator)
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
+   --- End of inner exception stack trace ---
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
+   at System.Web.Http.Controllers.HttpControllerDescriptor.CreateController(HttpRequestMessage request)
+   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()
+Unhandled exception thrown in GET for request http://localhost:50363/Customer/Get: System.InvalidOperationException: An error occurred when trying to create a controller of type 'CustomerController'. Make sure that the controller has a parameterless public constructor. ---> System.ArgumentException: Type 'RoundTheClock.Core.Controllers.CustomerController' does not have a default constructor
+   at System.Linq.Expressions.Expression.New(Type type)
+   at System.Web.Http.Internal.TypeActivator.Create[TBase](Type instanceType)
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.GetInstanceOrActivator(HttpRequestMessage request, Type controllerType, Func`1& activator)
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
+   --- End of inner exception stack trace ---
+   at System.Web.Http.Dispatcher.DefaultHttpControllerActivator.Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)
+   at System.Web.Http.Controllers.HttpControllerDescriptor.CreateController(HttpRequestMessage request)
+   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()

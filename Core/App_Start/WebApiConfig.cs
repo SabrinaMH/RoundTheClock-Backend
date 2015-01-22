@@ -1,11 +1,9 @@
 using Microsoft.Practices.Unity;
+using RoundTheClock.Core.Database;
 using RoundTheClock.Core.Dependencies;
 using RoundTheClock.Core.Logging;
 using RoundTheClock.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using RoundTheClock.Core.Utilities;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 
@@ -16,7 +14,8 @@ namespace RoundTheClock
         public static void Register(HttpConfiguration config)
         {
             var container = new UnityContainer();
-            container.RegisterType<ICustomerRepository, CustomerRepository>(new HierarchicalLifetimeManager());
+            container.RegisterType<IDbConnection, DbConnection>(new InjectionConstructor(ConnectionUtility.ConnectionString));
+            container.RegisterType<ICustomerRepository, CustomerRepository>();
             config.DependencyResolver = new UnityResolver(container);
 
             config.Routes.MapHttpRoute("Default",

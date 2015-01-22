@@ -96,6 +96,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CustomerRepositoryTests.cs" />
+    <Compile Include="HarvestApiClientTests.cs" />
     <Compile Include="ProjectRepositoryTests.cs" />
     <Compile Include="TaskRepositoryTests.cs" />
     <Compile Include="TimeEntryRepositoryTests.cs" />

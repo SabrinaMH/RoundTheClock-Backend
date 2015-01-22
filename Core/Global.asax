@@ -1,1 +1,1 @@
-﻿<%@ Application Language="C#" CodeBehind="~/App_Code/Global.asax.cs" Inherits="Global" %>
+﻿<%@ Application Language="C#" CodeBehind="~/Global.asax.cs" Inherits="RoundTheClock.Core.Global" %>
