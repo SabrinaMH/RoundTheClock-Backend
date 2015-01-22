@@ -12,12 +12,12 @@ namespace RoundTheClock.UnitTests
 
         public static bool AreProjectsEqual(Project p1, Project p2)
         {
-            return p1.Name == p2.Name && p1.Customer.Name == p2.Customer.Name;
+            return p1.Name == p2.Name && p1.Tasks.TrueForAll(t1 => p2.Tasks.Exists(t2 => AreTasksEqual(t1, t2))) && p1.Tasks.Count == p2.Tasks.Count;
         }
 
         public static bool AreTasksEqual(Task t1, Task t2)
         {
-            return t1.Name == t2.Name && t1.ProjectId == t2.ProjectId;
+            return t1.Name == t2.Name;
         }
     }
 }
