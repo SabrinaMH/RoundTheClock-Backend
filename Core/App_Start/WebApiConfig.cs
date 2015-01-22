@@ -13,15 +13,20 @@ namespace RoundTheClock
     {
         public static void Register(HttpConfiguration config)
         {
+            // IoC
             var container = new UnityContainer();
             container.RegisterType<IDbConnection, DbConnection>(new InjectionConstructor(ConnectionUtility.ConnectionString));
             container.RegisterType<ICustomerRepository, CustomerRepository>();
+            container.RegisterType<IProjectRepository, ProjectRepository>();
+            container.RegisterType<ITimeEntryRepository, TimeEntryRepository>();
             config.DependencyResolver = new UnityResolver(container);
 
+            // Routing
             config.Routes.MapHttpRoute("Default",
                 "{controller}/{id}",
                 new { id = RouteParameter.Optional });
 
+            // Logging
             config.Services.Add(typeof(IExceptionLogger), new GlobalExceptionLogger());
             config.Services.Replace(typeof(IExceptionHandler), new GlobalExceptionHandler());
         }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace RoundTheClock.Core.Repositories
 {
-    public class ProjectRepository
+    public class ProjectRepository : IProjectRepository
     {
         private readonly DbConnection _dbConnection;
 
@@ -21,8 +21,29 @@ namespace RoundTheClock.Core.Repositories
             using (var conn = _dbConnection.NewConnection)
             {
                 conn.Open();
-                return conn.Query<ProjectDAO>(string.Format(
-                    "select * from {0} where Customer = '{1}'", _dbConnection.ProjectTable, customer.Name)).Select(dao => ProjectMapper.Map(dao)).ToList();
+                var lookup = new Dictionary<long, Project>();
+                conn.Query<ProjectDAO, TaskDAO, Project>(string.Format(@"
+                    select p.*, t.*
+                    from projects p
+                    inner join tasks t
+                    on t.ProjectId = p.Id
+                    where Customer = '{0}'
+                ", customer.Name), (p, t) =>
+                 {
+                     Project project;
+                     if (!lookup.TryGetValue(p.Id, out project))
+                     {
+                         project = ProjectMapper.Map(p);
+                         lookup.Add(p.Id, project);
+                     }
+                     if (project.Tasks == null)
+                     {
+                         project.Tasks = new List<Task>();
+                     }
+                     project.Tasks.Add(TaskMapper.Map(t));
+                     return project;
+                 }, splitOn: "Name");
+                return lookup.Values.ToList();
             }
         }
     }

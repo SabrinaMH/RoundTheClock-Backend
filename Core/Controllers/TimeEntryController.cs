@@ -1,7 +1,5 @@
-using RoundTheClock.Core.Database;
 using RoundTheClock.Core.Model;
 using RoundTheClock.Core.Repositories;
-using RoundTheClock.Core.Utilities;
 using System.Collections.Generic;
 using System.Web.Http;
 
@@ -9,10 +7,16 @@ namespace RoundTheClock.Core.Controllers
 {
     public class TimeEntryController : ApiController
     {
+        private readonly ITimeEntryRepository _timeEntryRepository;
+
+        public TimeEntryController(ITimeEntryRepository timeEntryRepository)
+        {
+            _timeEntryRepository = timeEntryRepository;
+        }
+
         public IHttpActionResult Post(IEnumerable<TimeEntry> entries)
         {
-            var timeEntryRepository = new TimeEntryRepository(new DbConnection(ConnectionUtility.ConnectionString));
-            int noRows = timeEntryRepository.Insert(entries);
+            int noRows = _timeEntryRepository.Insert(entries);
             return Ok(noRows);
         }
     }

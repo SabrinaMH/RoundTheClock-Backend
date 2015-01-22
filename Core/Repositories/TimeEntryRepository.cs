@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace RoundTheClock.Core.Repositories
 {
-    public class TimeEntryRepository
+    public class TimeEntryRepository : ITimeEntryRepository
     {
-        private readonly DbConnection _dbConnection;
+        private readonly IDbConnection _dbConnection;
 
-        public TimeEntryRepository(DbConnection dbConnection)
+        public TimeEntryRepository(IDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }
