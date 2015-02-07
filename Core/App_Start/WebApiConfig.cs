@@ -4,6 +4,7 @@ using RoundTheClock.Core.Dependencies;
 using RoundTheClock.Core.Logging;
 using RoundTheClock.Core.Repositories;
 using RoundTheClock.Core.Utilities;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 
@@ -25,6 +26,9 @@ namespace RoundTheClock
             config.Routes.MapHttpRoute("Default",
                 "{controller}/{id}",
                 new { id = RouteParameter.Optional });
+
+            // Return type
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             // Logging
             config.Services.Add(typeof(IExceptionLogger), new GlobalExceptionLogger());

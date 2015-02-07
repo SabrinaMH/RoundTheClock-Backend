@@ -1,4 +1,4 @@
-using RoundTheClock.Core.Model;
+using RoundTheClock.Core.Database;
 using RoundTheClock.Core.Repositories;
 using System.Collections.Generic;
 using System.Web.Http;
@@ -14,7 +14,7 @@ namespace RoundTheClock.Core.Controllers
             _timeEntryRepository = timeEntryRepository;
         }
 
-        public IHttpActionResult Post(IEnumerable<TimeEntry> entries)
+        public IHttpActionResult Post(IEnumerable<TimeEntryDAO> entries)
         {
             int noRows = _timeEntryRepository.Insert(entries);
             return Ok(noRows);

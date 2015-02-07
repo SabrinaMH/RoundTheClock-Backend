@@ -31,7 +31,7 @@ namespace RoundTheClock.Core.Repositories
             }
         }
 
-        public int Insert(IEnumerable<TimeEntry> entries)
+        public int Insert(IEnumerable<TimeEntryDAO> entries)
         {
             int noRows = 0;
             using (var conn = _dbConnection.NewConnection)
@@ -44,7 +44,7 @@ namespace RoundTheClock.Core.Repositories
                     noRows = conn.Execute(
                         String.Format(@"Insert into {0} (Project, Task, Hours, Date, Customer) 
                                         values (@Project, @Task, @Hours, @Date, @Customer)", _dbConnection.TimeEntryTable),
-                        entries.Select(entry => TimeEntryMapper.Map(entry)), transaction);
+                        entries, transaction);
                     transaction.Commit();
                 }
             }
