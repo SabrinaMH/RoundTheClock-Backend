@@ -146,6 +146,7 @@
     <Content Include="App_Data\RoundTheClock.sqlite" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\TimeEntryDTO.cs" />
     <Compile Include="Global.asax.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CustomerController.cs" />

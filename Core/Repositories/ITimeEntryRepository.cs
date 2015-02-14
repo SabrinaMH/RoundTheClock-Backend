@@ -7,6 +7,6 @@ namespace RoundTheClock.Core.Repositories
     public interface ITimeEntryRepository
     {
         List<TimeEntry> GetUncommittedForCustomer(Customer customer);
-        int Insert(IEnumerable<TimeEntryDAO> entries);
+        int Insert(IEnumerable<TimeEntry> entries);
     }
 }
