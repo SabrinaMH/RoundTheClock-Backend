@@ -1,9 +1,14 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Practices.Unity;
+using Moq;
+using NUnit.Framework;
+using RoundTheClock.Core;
+using RoundTheClock.Core.Model;
+using RoundTheClock.Core.Repositories;
 using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace RoundTheClock.UnitTests
 {
@@ -13,14 +18,27 @@ namespace RoundTheClock.UnitTests
         [Test]
         public void Post()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(ConfigurationManager.AppSettings["serverUrl"]);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
-            var requestBody = @"{""customer"":""EnergiMidt"",""project"":""Mit EnergiMidt v3"",""task"":""Udvikling"",""date"":null,""hours"":2}";
-            HttpContent body = new ObjectContent<string>(requestBody, jsonFormatter);
-            var test = client.PostAsync("/TimeEntry", body).Result;
+            // Arrange
+            var requestBody = @"[{""Customer"":""EnergiMidt"",""Project"":""Mit EnergiMidt v3"",""Task"":""Udvikling"",""Date"":""20150101"",""Hours"":2}]";
+            var noRows = Regex.Matches(requestBody, "customer", RegexOptions.IgnoreCase).Count;
 
+            var mockTimeEntryRepository = new Mock<ITimeEntryRepository>();
+            mockTimeEntryRepository.Setup(mock => mock.Insert(It.IsAny<IEnumerable<TimeEntry>>())).Returns(noRows);
+            Startup.Container.RegisterInstance<ITimeEntryRepository>(mockTimeEntryRepository.Object);
+
+            var body = new StringContent(requestBody, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = GlobalInitAndTearDown.Server
+                .CreateRequest("/TimeEntry")
+                .And(request => request.Content = body)
+                .AddHeader("Content-Type", "application/json")
+                .PostAsync().Result;
+
+            // Assert
+            var task = response.Content.ReadAsAsync<int>();
+            task.Wait();
+            Assert.IsTrue(task.Result == noRows);
         }
     }
 }

@@ -33,6 +33,9 @@ namespace RoundTheClock.Core.Repositories
 
         public int Insert(IEnumerable<TimeEntry> entries)
         {
+            if (entries.Count() == 0)
+                return 0;
+
             int noRows = 0;
             using (var conn = _dbConnection.NewConnection)
             {

@@ -1,10 +1,9 @@
-using RoundTheClock.Core.Database;
 using RoundTheClock.Core.DTO;
+using RoundTheClock.Core.Mappers;
 using RoundTheClock.Core.Repositories;
 using System.Collections.Generic;
-using System.Web.Http;
 using System.Linq;
-using RoundTheClock.Core.Mappers;
+using System.Web.Http;
 
 namespace RoundTheClock.Core.Controllers
 {
