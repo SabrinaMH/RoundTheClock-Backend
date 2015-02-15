@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using log4net;
+using Microsoft.Owin;
 using Microsoft.Practices.Unity;
 using Owin;
 using RoundTheClock.Core.Database;
@@ -16,10 +17,12 @@ namespace RoundTheClock.Core
 {
     public class Startup
     {
+        private static ILog _logger = LogManager.GetLogger(typeof(Startup));
         public static UnityContainer Container { get; private set; }
 
         public void Configuration(IAppBuilder builder)
         {
+            _logger.Info("In Configuration method in Startup class");
             var config = new HttpConfiguration();        
 
             // IoC
