@@ -1,13 +1,14 @@
 ﻿using log4net;
 using Microsoft.Owin;
 using Microsoft.Practices.Unity;
+using Newtonsoft.Json.Serialization;
 using Owin;
 using RoundTheClock.Core.Database;
 using RoundTheClock.Core.Dependencies;
 using RoundTheClock.Core.Logging;
 using RoundTheClock.Core.Repositories;
 using RoundTheClock.Core.Utilities;
-using System.Net.Http.Headers;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 
@@ -23,7 +24,7 @@ namespace RoundTheClock.Core
         public void Configuration(IAppBuilder builder)
         {
             _logger.Info("In Configuration method in Startup class");
-            var config = new HttpConfiguration();        
+            var config = new HttpConfiguration();
 
             // IoC
             Container = new UnityContainer();
@@ -38,8 +39,9 @@ namespace RoundTheClock.Core
                 "{controller}/{id}",
                 new { id = RouteParameter.Optional });
 
-            // Return type
-            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = true;
+            // JSON settings
+            //config.Formatters.JsonFormatter.UseDataContractJsonSerializer = true;
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             // Logging

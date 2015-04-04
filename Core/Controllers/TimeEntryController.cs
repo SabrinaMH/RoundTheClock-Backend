@@ -1,14 +1,16 @@
 using RoundTheClock.Core.DTO;
-using RoundTheClock.Core.Mappers;
 using RoundTheClock.Core.Repositories;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
+using System.Linq;
+using RoundTheClock.Core.Mappers;
 
 namespace RoundTheClock.Core.Controllers
 {
     public class TimeEntryController : ApiController
     {
+        const string CLIENT_URL = "clientUrl";
+
         private readonly ITimeEntryRepository _timeEntryRepository;
 
         public TimeEntryController(ITimeEntryRepository timeEntryRepository)
@@ -20,6 +22,11 @@ namespace RoundTheClock.Core.Controllers
         {
             int noRows = _timeEntryRepository.Insert(entries.Select(dto => TimeEntryMapper.Map(dto)));
             return Ok(noRows);
+        }
+
+        public IHttpActionResult Options()
+        {
+            return Ok();
         }
     }
 }
