@@ -28,7 +28,7 @@ namespace RoundTheClock.Core.Mappers
                 Hours = dao.Hours,
                 Project = new Project(dao.Project),
                 Task = new Task(dao.Task),
-                Date = DateTime.ParseExact(dao.Date, "yyyyMMdd", CultureInfo.InvariantCulture)
+                Date = DateTime.ParseExact(RemoveTime(dao.Date), "yyyy-MM-dd", CultureInfo.InvariantCulture)
             };
         }
 
@@ -40,8 +40,13 @@ namespace RoundTheClock.Core.Mappers
                 Hours = dto.Hours,
                 Project = new Project(dto.Project),
                 Task = new Task(dto.Task),
-                Date = DateTime.ParseExact(dto.Date, "yyyyMMdd", CultureInfo.InvariantCulture)
+                Date = DateTime.ParseExact(RemoveTime(dto.Date), "yyyy-MM-dd", CultureInfo.InvariantCulture)
             };
+        }
+
+        private static string RemoveTime(string date)
+        {
+            return date.Split('T')[0];
         }
     }
 }
