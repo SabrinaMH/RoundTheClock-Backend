@@ -1,23 +1,25 @@
 ﻿using RoundTheClock.Core.DAL;
 using RoundTheClock.Core.Mappers;
 using RoundTheClock.Core.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace RoundTheClock.Core.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class EntryRepository : IEntryRepository
     {
         private readonly IRtcDbContext _dbContext;
 
-        public ProjectRepository(IRtcDbContext dbContext)
+        public EntryRepository(IRtcDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public List<Project> GetProjectsForCustomer(Customer customer)
+        public void Insert(Entry entry)
         {
-            return _dbContext.Customers.FirstOrDefault(c => c.Name == customer.Name).Projects.Select(p => ProjectMapper.Map(p)).ToList();
+            _dbContext.Entries.Add(EntryMapper.Map(entry));
+            _dbContext.SaveChanges();
         }
     }
 }

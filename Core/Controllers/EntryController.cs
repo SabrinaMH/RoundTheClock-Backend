@@ -7,21 +7,21 @@ using RoundTheClock.Core.Mappers;
 
 namespace RoundTheClock.Core.Controllers
 {
-    public class TimeEntryController : ApiController
+    public class EntryController : ApiController
     {
         const string CLIENT_URL = "clientUrl";
 
-        private readonly ITimeEntryRepository _timeEntryRepository;
+        private readonly IEntryRepository _timeEntryRepository;
 
-        public TimeEntryController(ITimeEntryRepository timeEntryRepository)
+        public EntryController(IEntryRepository timeEntryRepository)
         {
             _timeEntryRepository = timeEntryRepository;
         }
 
-        public IHttpActionResult Post(IEnumerable<TimeEntryDTO> entries)
+        public IHttpActionResult Post(TimeEntryDTO entry)
         {
-            int noRows = _timeEntryRepository.Insert(entries.Select(dto => TimeEntryMapper.Map(dto)));
-            return Ok(noRows);
+            _timeEntryRepository.Insert(EntryMapper.Map(entry));
+            return Ok();
         }
 
         public IHttpActionResult Options()

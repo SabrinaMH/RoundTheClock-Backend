@@ -1,6 +1,5 @@
-﻿using Dapper;
-using NUnit.Framework;
-using RoundTheClock.Core.Database;
+﻿using NUnit.Framework;
+using RoundTheClock.Core.DAL;
 using RoundTheClock.Core.Mappers;
 using RoundTheClock.Core.Model;
 using RoundTheClock.Core.Repositories;
@@ -16,8 +15,6 @@ namespace RoundTheClock.UnitTests
     public class TaskRepositoryTests
     {
         private string _fullConnectionString;
-        private DbConnection _dbConnection;
-        private TaskRepository _taskRepository;
         private List<Project> _projects;
         private List<Customer> _customers;
         private List<TaskDAO> _tasks;
@@ -27,8 +24,6 @@ namespace RoundTheClock.UnitTests
         {
             var _connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
             _fullConnectionString = "Data Source=" + Path.Combine(Environment.CurrentDirectory, _connectionString);
-            _dbConnection = new DbConnection(_fullConnectionString);
-            _taskRepository = new TaskRepository(_dbConnection);
             _tasks = new List<TaskDAO>();
         }
 

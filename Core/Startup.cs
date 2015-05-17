@@ -3,11 +3,10 @@ using Microsoft.Owin;
 using Microsoft.Practices.Unity;
 using Newtonsoft.Json.Serialization;
 using Owin;
-using RoundTheClock.Core.Database;
-using RoundTheClock.Core.Dependencies;
+using RoundTheClock.Core.DAL;
+using RoundTheClock.Core.Unity;
 using RoundTheClock.Core.Logging;
 using RoundTheClock.Core.Repositories;
-using RoundTheClock.Core.Utilities;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
@@ -28,10 +27,10 @@ namespace RoundTheClock.Core
 
             // IoC
             Container = new UnityContainer();
-            Container.RegisterType<IDbConnection, DbConnection>(new InjectionConstructor(ConnectionUtility.ConnectionString));
+            Container.RegisterType<IRtcDbContext, RtcDbContext>(new PerRequestLifetimeManager());
             Container.RegisterType<ICustomerRepository, CustomerRepository>();
             Container.RegisterType<IProjectRepository, ProjectRepository>();
-            Container.RegisterType<ITimeEntryRepository, TimeEntryRepository>();
+            Container.RegisterType<IEntryRepository, EntryRepository>();
             config.DependencyResolver = new UnityResolver(Container);
 
             // Routing

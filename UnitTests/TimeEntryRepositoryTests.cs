@@ -1,6 +1,4 @@
-﻿using Dapper;
-using NUnit.Framework;
-using RoundTheClock.Core.Database;
+﻿using NUnit.Framework;
 using RoundTheClock.Core.Mappers;
 using RoundTheClock.Core.Model;
 using RoundTheClock.Core.Repositories;
@@ -16,17 +14,15 @@ namespace RoundTheClock.UnitTests
     [TestFixture]
     public class TimeEntryRepositoryTests
     {
-        private TimeEntryRepository _timeEntryRepository;
+        private EntryRepository _timeEntryRepository;
         private int _uncommittedCustomerEntries;
-        private DbConnection _dbConnection;
 
         [SetUp]
         public void SetUp()
         {
             var _connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
             var fullConnectionString = "Data Source=" + Path.Combine(Environment.CurrentDirectory, _connectionString);
-            _dbConnection = new DbConnection(fullConnectionString);
-            _timeEntryRepository = new TimeEntryRepository(_dbConnection);
+            _timeEntryRepository = new EntryRepository(_dbConnection);
         }
 
         [Test]
@@ -53,14 +49,14 @@ namespace RoundTheClock.UnitTests
             ClearTables(new List<Customer> { energiMidt, mjolner });
             SetUpTables();
 
-            var timeEntries = new List<TimeEntry> {
-                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-27"), Customer = energiMidt },
-                new TimeEntry { Project = internt, Task = testfaellesskab, Hours = 1, Date = DateTime.Parse("2014-11-09"), Customer = mjolner }
+            var timeEntries = new List<Entry> {
+                new Entry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-27"), Customer = energiMidt },
+                new Entry { Project = internt, Task = testfaellesskab, Hours = 1, Date = DateTime.Parse("2014-11-09"), Customer = mjolner }
             };
 
-            var duplicateTimeEntries = new List<TimeEntry> {
-                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = energiMidt },
-                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = energiMidt }
+            var duplicateTimeEntries = new List<Entry> {
+                new Entry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = energiMidt },
+                new Entry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2014-12-21"), Customer = energiMidt }
             };
 
             var noRows = _timeEntryRepository.Insert(timeEntries);
@@ -93,14 +89,14 @@ namespace RoundTheClock.UnitTests
             var internt = new Project("Internt");
             var morgenmoede = new Task("morgenmøde");
 
-            var timeEntries = new List<TimeEntry> {
-                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 1, Date = DateTime.Parse("2014-12-01"), Customer = energiMidt },
-                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 2, Date = DateTime.Parse("2013-12-01"), Customer = energiMidt },
-                new TimeEntry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2013-11-02"), Customer = energiMidt },
-                new TimeEntry { Project = internt, Task = morgenmoede, Hours = 0.5F, Date = DateTime.Parse("2014-11-09"), Customer = mjolner }
+            var timeEntries = new List<Entry> {
+                new Entry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 1, Date = DateTime.Parse("2014-12-01"), Customer = energiMidt },
+                new Entry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 2, Date = DateTime.Parse("2013-12-01"), Customer = energiMidt },
+                new Entry { Project = mitEnergiMidt, Task = nytWebsite, Hours = 3, Date = DateTime.Parse("2013-11-02"), Customer = energiMidt },
+                new Entry { Project = internt, Task = morgenmoede, Hours = 0.5F, Date = DateTime.Parse("2014-11-09"), Customer = mjolner }
             };
 
-            var customerEntries = new List<TimeEntry> { 
+            var customerEntries = new List<Entry> { 
                 timeEntries.Where(entry => entry.Customer.Name == energiMidt.Name).OrderBy(entry => entry.Date).First() 
             };
 
@@ -110,11 +106,11 @@ namespace RoundTheClock.UnitTests
             {
                 conn.Execute("INSERT INTO " + _dbConnection.TimeEntryTable +
                     "(Project, Task, Hours, Date, Customer) VALUES (@Project, @Task, @Hours, @Date, @Customer)",
-                    timeEntries.Select(entry => TimeEntryMapper.Map(entry)));
+                    timeEntries.Select(entry => EntryMapper.Map(entry)));
 
                 conn.Execute("Insert into " + energiMidt.Name +
                     "(Project, Task, Date) VALUES (@Project, @Task, @Date)",
-                    customerEntries.Select(entry => TimeEntryMapper.Map(entry)));
+                    customerEntries.Select(entry => EntryMapper.Map(entry)));
             }
         }
 

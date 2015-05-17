@@ -3,11 +3,12 @@ namespace RoundTheClock.Core.DTO
 {
     public class TimeEntryDTO
     {
-        public string Customer { get; set; }
-        public float Hours { get; set; }
-        public string Project { get; set; }
-        public string Task { get; set; }
+        public string CustomerName { get; set; }
+        public string ProjectName { get; set; }
+        public string TaskName { get; set; }
         public string Date { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
 
         public TimeEntryDTO() { }
     }

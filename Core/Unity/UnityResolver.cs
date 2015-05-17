@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Http.Dependencies;
 
-namespace RoundTheClock.Core.Dependencies
+namespace RoundTheClock.Core.Unity
 {
     public class UnityResolver : IDependencyResolver
     {

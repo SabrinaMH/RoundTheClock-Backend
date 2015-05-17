@@ -1,7 +1,6 @@
-﻿using Dapper;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
-using RoundTheClock.Core.Database;
+using RoundTheClock.Core.DAL;
 using RoundTheClock.Core.Model;
 using RoundTheClock.Core.Repositories;
 using System;
@@ -16,7 +15,6 @@ namespace RoundTheClock.UnitTests
     {
         private CustomerRepository _customerRepository;
         private List<Customer> _customers;
-        private DbConnection _dbConnection;
         private Mock<IProjectRepository> _mockProjectRepository;
 
         [SetUp]
@@ -24,7 +22,6 @@ namespace RoundTheClock.UnitTests
         {
             var _connectionString = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
             var fullConnectionString = "Data Source=" + Path.Combine(Environment.CurrentDirectory, _connectionString);
-            _dbConnection = new DbConnection(fullConnectionString);
             _mockProjectRepository = new Mock<IProjectRepository>();
             _customerRepository = new CustomerRepository(_dbConnection, _mockProjectRepository.Object);
         }

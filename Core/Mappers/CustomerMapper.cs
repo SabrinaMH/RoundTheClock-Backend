@@ -1,5 +1,6 @@
-﻿using RoundTheClock.Core.Database;
+﻿using RoundTheClock.Core.DAL;
 using RoundTheClock.Core.Model;
+using System.Linq;
 
 namespace RoundTheClock.Core.Mappers
 {
@@ -17,7 +18,8 @@ namespace RoundTheClock.Core.Mappers
         {
             return new Customer
             {
-                Name = dao.Name
+                Name = dao.Name,
+                Projects = dao.Projects.Select(p => ProjectMapper.Map(p)).ToList()
             };
         }
     }

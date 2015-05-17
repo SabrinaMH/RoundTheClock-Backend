@@ -22,9 +22,9 @@ namespace RoundTheClock.UnitTests
             var requestBody = @"[{""Customer"":""EnergiMidt"",""Project"":""Mit EnergiMidt v3"",""Task"":""Udvikling"",""Date"":""20150101"",""Hours"":2}]";
             var noRows = Regex.Matches(requestBody, "customer", RegexOptions.IgnoreCase).Count;
 
-            var mockTimeEntryRepository = new Mock<ITimeEntryRepository>();
-            mockTimeEntryRepository.Setup(mock => mock.Insert(It.IsAny<IEnumerable<TimeEntry>>())).Returns(noRows);
-            Startup.Container.RegisterInstance<ITimeEntryRepository>(mockTimeEntryRepository.Object);
+            var mockTimeEntryRepository = new Mock<IEntryRepository>();
+            mockTimeEntryRepository.Setup(mock => mock.Insert(It.IsAny<IEnumerable<Entry>>())).Returns(noRows);
+            Startup.Container.RegisterInstance<IEntryRepository>(mockTimeEntryRepository.Object);
 
             var body = new StringContent(requestBody, Encoding.UTF8, "application/json");
 

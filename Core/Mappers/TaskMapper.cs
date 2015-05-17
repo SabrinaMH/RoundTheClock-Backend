@@ -1,4 +1,4 @@
-﻿using RoundTheClock.Core.Database;
+﻿using RoundTheClock.Core.DAL;
 using RoundTheClock.Core.Model;
 
 namespace RoundTheClock.Core.Mappers
@@ -10,6 +10,14 @@ namespace RoundTheClock.Core.Mappers
             return new Task
             {
                 Name = dao.Name
+            };
+        }
+
+        public static TaskDAO Map(Task task)
+        {
+            return new TaskDAO
+            {
+                Name = task.Name
             };
         }
     }
