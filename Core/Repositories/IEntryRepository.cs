@@ -7,5 +7,6 @@ namespace RoundTheClock.Core.Repositories
     public interface IEntryRepository
     {
         void Insert(Entry entry);
+        IEnumerable<Entry> GetUncommittedEntries();
     }
 }

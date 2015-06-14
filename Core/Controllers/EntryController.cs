@@ -4,29 +4,37 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Linq;
 using RoundTheClock.Core.Mappers;
+using RoundTheClock.Core.Model;
+using log4net;
 
 namespace RoundTheClock.Core.Controllers
 {
     public class EntryController : ApiController
     {
-        const string CLIENT_URL = "clientUrl";
+        private readonly IEntryRepository _entryRepository;
+        private readonly ILog _logger = LogManager.GetLogger(typeof(EntryController));
 
-        private readonly IEntryRepository _timeEntryRepository;
-
-        public EntryController(IEntryRepository timeEntryRepository)
+        public EntryController(IEntryRepository entryRepository)
         {
-            _timeEntryRepository = timeEntryRepository;
+            _entryRepository = entryRepository;
         }
 
         public IHttpActionResult Post(TimeEntryDTO entry)
         {
-            _timeEntryRepository.Insert(EntryMapper.Map(entry));
+            _logger.Info(string.Format("Data posted to EntryController:\n{0}", string.Join(", ", entry.CustomerName, entry.ProjectName, entry.TaskName, entry.Date, entry.From, entry.To)));
+            _entryRepository.Insert(EntryMapper.Map(entry));
             return Ok();
         }
 
         public IHttpActionResult Options()
         {
             return Ok();
+        }
+
+        public IHttpActionResult Get()
+        {
+            _logger.Info("In Get() in EntryController");
+            return Ok<IEnumerable<Entry>>(_entryRepository.GetUncommittedEntries());
         }
     }
 }

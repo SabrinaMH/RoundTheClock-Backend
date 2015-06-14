@@ -8,28 +8,30 @@ namespace RoundTheClock.Core.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly IProjectRepository _projectRepository;
+        private readonly IRtcDbContext _dbContext;
 
-        public CustomerRepository(IProjectRepository projectRepository)
+        public CustomerRepository(IRtcDbContext dbContext)
         {
-            _projectRepository = projectRepository;
+            _dbContext = dbContext;
         }
 
         public IList<Customer> GetCustomers()
         {
             var customers = new List<Customer>();
 
-            using (var context = new RtcDbContext())
+            foreach (var dao in _dbContext.Customers)
             {
-                foreach (var dao in context.Customers)
-                {
-                    var customer = CustomerMapper.Map(dao);
-                    customer.Projects = dao.Projects.Select(projDao => ProjectMapper.Map(projDao)).ToList();
-                    customers.Add(customer);
-                }
+                var customer = CustomerMapper.Map(dao);
+                customer.Projects = dao.Projects.Select(projDao => ProjectMapper.Map(projDao)).ToList();
+                customers.Add(customer);
             }
 
             return customers;
+        }
+
+        public CustomerDAO GetCustomerDAOByName(string name)
+        {
+            return _dbContext.Customers.FirstOrDefault(c => c.Name == name);
         }
     }
 }

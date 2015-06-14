@@ -9,37 +9,39 @@ namespace RoundTheClock.Core.DAL
     [Table("Entries")]
     public partial class EntryDAO
     {
-        [Key]
-        [Column(Order = 0)]
+        public EntryDAO()
+        {
+        }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("id")]
+        public long Id { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long project_fk { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long task_fk { get; set; }
 
-        [Key]
-        [Column("from", Order = 2)]
+        [Column("from")]
         public string From { get; set; }
 
-        [Key]
-        [Column("date", Order = 3)]
+        [Column("date")]
         public string Date { get; set; }
 
-        [Key]
-        [Column(Order = 4)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long customer_fk { get; set; }
 
-        [Key]
-        [Column("to", Order = 5)]
+        [Column("to")]
         public string To { get; set; }
 
-        public virtual CustomerDAO Customers { get; set; }
+        [Column("committed")]
+        public bool Committed { get; set; }
 
-        public virtual ProjectDAO Projects { get; set; }
+        public virtual CustomerDAO Customer { get; set; }
 
-        public virtual TaskDAO Tasks { get; set; }
+        public virtual ProjectDAO Project { get; set; }
+
+        public virtual TaskDAO Task { get; set; }
     }
 }

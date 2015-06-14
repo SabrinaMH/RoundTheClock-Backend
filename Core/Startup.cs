@@ -10,6 +10,7 @@ using RoundTheClock.Core.Repositories;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
+using System.Data.Entity.Infrastructure.Interception;
 
 [assembly: OwinStartup(typeof(RoundTheClock.Core.Startup))]
 
@@ -30,6 +31,7 @@ namespace RoundTheClock.Core
             Container.RegisterType<IRtcDbContext, RtcDbContext>(new PerRequestLifetimeManager());
             Container.RegisterType<ICustomerRepository, CustomerRepository>();
             Container.RegisterType<IProjectRepository, ProjectRepository>();
+            Container.RegisterType<ITaskRepository, TaskRepository>();
             Container.RegisterType<IEntryRepository, EntryRepository>();
             config.DependencyResolver = new UnityResolver(Container);
 
@@ -46,6 +48,7 @@ namespace RoundTheClock.Core
             // Logging
             config.Services.Add(typeof(IExceptionLogger), new GlobalExceptionLogger());
             config.Services.Replace(typeof(IExceptionHandler), new GlobalExceptionHandler());
+            DbInterception.Add(new SqlLogger());
 
             builder.UseWebApi(config);
         }

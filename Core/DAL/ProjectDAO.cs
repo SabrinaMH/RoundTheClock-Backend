@@ -21,6 +21,7 @@ namespace RoundTheClock.Core.DAL
         public string Name { get; set; }
 
         [Column("id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long Id { get; set; }
 
         public virtual ICollection<EntryDAO> Entries { get; set; }

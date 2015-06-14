@@ -21,13 +21,13 @@ namespace RoundTheClock.Core.DAL
         {
             modelBuilder.Entity<CustomerDAO>()
                 .HasMany(e => e.Entries)
-                .WithRequired(e => e.Customers)
+                .WithRequired(e => e.Customer)
                 .HasForeignKey(e => e.customer_fk)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ProjectDAO>()
                 .HasMany(e => e.Entries)
-                .WithRequired(e => e.Projects)
+                .WithRequired(e => e.Project)
                 .HasForeignKey(e => e.project_fk)
                 .WillCascadeOnDelete(false);
 
@@ -38,7 +38,7 @@ namespace RoundTheClock.Core.DAL
 
             modelBuilder.Entity<TaskDAO>()
                 .HasMany(e => e.Entries)
-                .WithRequired(e => e.Tasks)
+                .WithRequired(e => e.Task)
                 .HasForeignKey(e => e.task_fk)
                 .WillCascadeOnDelete(false);
 

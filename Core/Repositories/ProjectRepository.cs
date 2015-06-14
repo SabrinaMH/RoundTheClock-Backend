@@ -19,5 +19,10 @@ namespace RoundTheClock.Core.Repositories
         {
             return _dbContext.Customers.FirstOrDefault(c => c.Name == customer.Name).Projects.Select(p => ProjectMapper.Map(p)).ToList();
         }
+
+        public ProjectDAO GetProjectDAOByName(string name)
+        {
+            return _dbContext.Projects.FirstOrDefault(p => p.Name == name);
+        }
     }
 }

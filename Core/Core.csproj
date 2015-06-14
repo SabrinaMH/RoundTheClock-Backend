@@ -181,6 +181,9 @@
     <Compile Include="DTO\TimeEntryDTO.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\EntryController.cs" />
+    <Compile Include="Logging\SqlLogger.cs" />
+    <Compile Include="Repositories\ITaskRepository.cs" />
+    <Compile Include="Repositories\TaskRepository.cs" />
     <Compile Include="Unity\UnityResolver.cs" />
     <Compile Include="ClientAPIs\HarvestAPI.cs" />
     <Compile Include="Mappers\CustomerMapper.cs" />

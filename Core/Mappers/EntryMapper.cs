@@ -12,10 +12,10 @@ namespace RoundTheClock.Core.Mappers
         {
             return new EntryDAO
             {
-                Customers = CustomerMapper.Map(timeEntry.Customer),
-                Projects = ProjectMapper.Map(timeEntry.Project),
-                Tasks = TaskMapper.Map(timeEntry.Task),
-                Date = timeEntry.Date.ToString("yyyyMMdd"),
+                Customer = CustomerMapper.Map(timeEntry.Customer),
+                Project = ProjectMapper.Map(timeEntry.Project),
+                Task = TaskMapper.Map(timeEntry.Task),
+                Date = timeEntry.Date.ToString("yyyy-MM-dd"),
                 From = timeEntry.From,
                 To = timeEntry.To
             };
@@ -25,9 +25,9 @@ namespace RoundTheClock.Core.Mappers
         {
             return new Entry
             {
-                Customer = new Customer(dao.Customers.Name),
-                Project = new Project(dao.Projects.Name),
-                Task = new Task(dao.Tasks.Name),
+                Customer = new Customer(dao.Customer.Name),
+                Project = new Project(dao.Project.Name),
+                Task = new Task(dao.Task.Name),
                 Date = DateTime.ParseExact(RemoveTime(dao.Date), "yyyy-MM-dd", CultureInfo.InvariantCulture),
                 From = dao.From,
                 To = dao.To
@@ -41,7 +41,7 @@ namespace RoundTheClock.Core.Mappers
                 Customer = new Customer(dto.CustomerName),
                 Project = new Project(dto.ProjectName),
                 Task = new Task(dto.TaskName),
-                Date = DateTime.ParseExact(RemoveTime(dto.Date), "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                Date = DateTime.ParseExact(dto.Date, "dd-MM-yyyy", CultureInfo.InvariantCulture),
                 From = dto.From,
                 To = dto.To
             };
